@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>עורך Markdown עברי | Hebrew Markdown Editor</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&family=Miriam+Libre:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <!-- Highlight.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    <!-- Mermaid.js for diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #faf9f7;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f5f3ef;
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --text-muted: #8a8a8a;
+            --accent: #d4a574;
+            --accent-hover: #c49464;
+            --accent-light: #f5ebe0;
+            --border: #e8e4de;
+            --border-light: #f0ece6;
+            --shadow: rgba(0, 0, 0, 0.06);
+            --shadow-hover: rgba(0, 0, 0, 0.1);
+            --code-bg: #f8f6f2;
+            --success: #7cb07e;
+            --font-body: 'Heebo', sans-serif;
+            --font-heading: 'Miriam Libre', serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --bg-tertiary: #2a2a2a;
+            --text-primary: #f0ece6;
+            --text-secondary: #c4c0b8;
+            --text-muted: #8a8682;
+            --accent: #d4a574;
+            --accent-hover: #e4b584;
+            --accent-light: #3a3530;
+            --border: #3a3a3a;
+            --border-light: #2e2e2e;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --shadow-hover: rgba(0, 0, 0, 0.4);
+            --code-bg: #2a2825;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            max-width: 1800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(212, 165, 116, 0.3);
+        }
+
+        .logo-text {
+            font-family: var(--font-heading);
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .logo-text span {
+            color: var(--accent);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(212, 165, 116, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(212, 165, 116, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .btn-icon {
+            padding: 0.6rem;
+            background: transparent;
+            color: var(--text-muted);
+        }
+
+        .btn-icon:hover {
+            background: var(--bg-tertiary);
+            color: var(--accent);
+        }
+
+        .btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Main Layout */
+        .main {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Editor Panel */
+        .panel {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 20px var(--shadow);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .panel:hover {
+            box-shadow: 0 8px 30px var(--shadow-hover);
+        }
+
+        .panel-header {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-tertiary);
+        }
+
+        .panel-title {
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .panel-title-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--accent);
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .panel-body {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Textarea */
+        .editor-textarea {
+            width: 100%;
+            height: 100%;
+            padding: 1.25rem;
+            border: none;
+            resize: none;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            line-height: 1.7;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            direction: rtl;
+            text-align: right;
+        }
+
+        .editor-textarea:focus {
+            outline: none;
+        }
+
+        .editor-textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Preview */
+        .preview-content {
+            padding: 1.5rem;
+            overflow-y: auto;
+            height: 100%;
+            direction: rtl;
+        }
+
+        /* Markdown Styles */
+        .preview-content h1,
+        .preview-content h2,
+        .preview-content h3,
+        .preview-content h4,
+        .preview-content h5,
+        .preview-content h6 {
+            font-family: var(--font-heading);
+            color: var(--text-primary);
+            margin-top: 1.5em;
+            margin-bottom: 0.75em;
+            line-height: 1.3;
+        }
+
+        .preview-content h1:first-child,
+        .preview-content h2:first-child,
+        .preview-content h3:first-child {
+            margin-top: 0;
+        }
+
+        .preview-content h1 {
+            font-size: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .preview-content h2 {
+            font-size: 1.5rem;
+            padding-bottom: 0.3rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .preview-content h3 { font-size: 1.25rem; }
+        .preview-content h4 { font-size: 1.1rem; }
+        .preview-content h5 { font-size: 1rem; }
+        .preview-content h6 { font-size: 0.9rem; color: var(--text-secondary); }
+
+        .preview-content p {
+            margin-bottom: 1em;
+            line-height: 1.8;
+        }
+
+        .preview-content strong {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .preview-content em {
+            font-style: italic;
+        }
+
+        .preview-content del {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .preview-content a {
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s ease;
+        }
+
+        .preview-content a:hover {
+            border-bottom-color: var(--accent);
+        }
+
+        .preview-content ul,
+        .preview-content ol {
+            margin-bottom: 1em;
+            padding-right: 1.5em;
+        }
+
+        .preview-content li {
+            margin-bottom: 0.5em;
+            line-height: 1.7;
+        }
+
+        .preview-content li > ul,
+        .preview-content li > ol {
+            margin-top: 0.5em;
+            margin-bottom: 0;
+        }
+
+        .preview-content blockquote {
+            margin: 1em 0;
+            padding: 1em 1.25em;
+            border-right: 4px solid var(--accent);
+            background: var(--accent-light);
+            border-radius: 0 8px 8px 0;
+            color: var(--text-secondary);
+        }
+
+        .preview-content blockquote p:last-child {
+            margin-bottom: 0;
+        }
+
+        .preview-content code {
+            font-family: var(--font-mono);
+            font-size: 0.85em;
+            background: var(--code-bg);
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            color: var(--accent-hover);
+        }
+
+        .preview-content pre {
+            margin: 1em 0;
+            padding: 1.25em;
+            background: var(--code-bg);
+            border-radius: 10px;
+            overflow-x: auto;
+            border: 1px solid var(--border-light);
+            direction: ltr;
+            text-align: left;
+        }
+
+        .preview-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .preview-content table {
+            width: 100%;
+            margin: 1em 0;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .preview-content th,
+        .preview-content td {
+            padding: 0.75em 1em;
+            border: 1px solid var(--border);
+            text-align: right;
+        }
+
+        .preview-content th {
+            background: var(--bg-tertiary);
+            font-weight: 600;
+        }
+
+        .preview-content tr:nth-child(even) {
+            background: var(--bg-tertiary);
+        }
+
+        .preview-content hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            margin: 2em 0;
+        }
+
+        .preview-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 1em 0;
+        }
+
+        /* Task list */
+        .preview-content input[type="checkbox"] {
+            margin-left: 0.5em;
+            accent-color: var(--accent);
+            transform: scale(1.1);
+        }
+        
+        /* Mermaid diagrams */
+        .mermaid {
+            direction: ltr;
+            text-align: center;
+            margin: 1.5em 0;
+            background: var(--bg-tertiary);
+            padding: 1.5em;
+            border-radius: 10px;
+            border: 1px solid var(--border-light);
+        }
+        
+        .mermaid svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            padding: 0.875rem 1.5rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 8px 30px var(--shadow-hover);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast svg {
+            width: 18px;
+            height: 18px;
+            color: var(--success);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .panel {
+                min-height: 400px;
+            }
+
+            .header-content {
+                flex-wrap: wrap;
+            }
+
+            .btn span {
+                display: none;
+            }
+
+            .btn svg {
+                margin: 0;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .header {
+                padding: 0.75rem 1rem;
+            }
+
+            .logo-text {
+                font-size: 1.1rem;
+            }
+
+            .main {
+                padding: 0.75rem;
+                gap: 1rem;
+            }
+        }
+
+        /* Print styles for PDF */
+        @media print {
+            body {
+                background: white !important;
+            }
+            
+            .header, .panel:first-child {
+                display: none !important;
+            }
+
+            .main {
+                display: block;
+                padding: 0;
+            }
+
+            .panel {
+                border: none;
+                box-shadow: none;
+                border-radius: 0;
+            }
+            
+            .panel-header {
+                display: none;
+            }
+
+            .preview-content {
+                padding: 0;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* Loading animation for PDF */
+        .btn.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .btn.loading svg {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Dropdown menu */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 0.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: 0 8px 30px var(--shadow-hover);
+            min-width: 180px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+        
+        .dropdown.open .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: right;
+            font-family: var(--font-body);
+        }
+        
+        .dropdown-item:first-child {
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .dropdown-item:last-child {
+            border-radius: 0 0 8px 8px;
+        }
+        
+        .dropdown-item:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+        
+        .dropdown-item svg {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border-light);
+            margin: 0.25rem 0;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">מ</div>
+                <div class="logo-text">עורך <span>Markdown</span> עברי</div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="clearEditor()" title="נקה">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                    <span>נקה</span>
+                </button>
+                
+                <div class="dropdown" id="copyDropdown">
+                    <button class="btn btn-secondary" onclick="toggleDropdown('copyDropdown')" title="העתק">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                        <span>העתק</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="dropdown-menu">
+                        <button class="dropdown-item" onclick="copyForWord(); closeDropdowns();">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                            העתק ל-Word
+                        </button>
+                        <button class="dropdown-item" onclick="copyHTML(); closeDropdowns();">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                            העתק HTML
+                        </button>
+                        <button class="dropdown-item" onclick="copyPlainText(); closeDropdowns();">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg>
+                            העתק טקסט רגיל
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="dropdown" id="exportDropdown">
+                    <button class="btn btn-primary" onclick="toggleDropdown('exportDropdown')" title="ייצא">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        <span>ייצוא</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="dropdown-menu">
+                        <button class="dropdown-item" onclick="exportPDF(); closeDropdowns();">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            ייצא PDF (הדפסה)
+                        </button>
+                        <button class="dropdown-item" onclick="exportHTML(); closeDropdowns();">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                            ייצא HTML
+                        </button>
+                    </div>
+                </div>
+                
+                <button class="btn btn-icon" onclick="toggleTheme()" title="החלף ערכת נושא">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="themeIcon"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <svg class="panel-title-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    עורך
+                </div>
+                <div class="panel-actions">
+                    <button class="btn btn-icon" onclick="loadSample()" title="טען דוגמה">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <textarea 
+                    class="editor-textarea" 
+                    id="editor" 
+                    placeholder="הקלד כאן את טקסט ה-Markdown שלך..."
+                    spellcheck="false"
+                ></textarea>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <svg class="panel-title-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    תצוגה מקדימה
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="preview-content" id="preview"></div>
+            </div>
+        </div>
+    </main>
+
+    <div class="toast" id="toast">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <span id="toastMessage"></span>
+    </div>
+
+    <script>
+        // Configure marked
+        marked.setOptions({
+            breaks: true,
+            gfm: true,
+            headerIds: true,
+            highlight: function(code, lang) {
+                if (lang && hljs.getLanguage(lang)) {
+                    try {
+                        return hljs.highlight(code, { language: lang }).value;
+                    } catch (e) {}
+                }
+                return hljs.highlightAuto(code).value;
+            }
+        });
+        
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'default',
+            securityLevel: 'loose',
+            fontFamily: 'Heebo, sans-serif'
+        });
+
+        const editor = document.getElementById('editor');
+        const preview = document.getElementById('preview');
+
+        // Sample Hebrew Markdown content
+        const sampleMarkdown = `# ברוכים הבאים לעורך Markdown העברי
+
+זהו עורך **Markdown** מתקדם עם תמיכה מלאה בעברית ובכיוון RTL.
+
+## תכונות עיקריות
+
+### עיצוב טקסט
+- **טקסט מודגש** בעזרת כוכביות כפולות
+- *טקסט נטוי* בעזרת כוכבית בודדת
+- ~~טקסט מחוק~~ בעזרת טילדות
+- \`קוד בתוך שורה\` בעזרת גרש הפוך
+
+### רשימות
+
+#### רשימה לא ממוספרת:
+- פריט ראשון
+- פריט שני
+  - תת-פריט א׳
+  - תת-פריט ב׳
+- פריט שלישי
+
+#### רשימה ממוספרת:
+1. שלב ראשון
+2. שלב שני
+3. שלב שלישי
+
+#### רשימת משימות:
+- [x] משימה שהושלמה
+- [ ] משימה בהמתנה
+- [ ] משימה נוספת
+
+### ציטוטים
+
+> "הדרך הטובה ביותר לחזות את העתיד היא ליצור אותו."
+> 
+> — פיטר דרוקר
+
+### קוד
+
+\`\`\`javascript
+// דוגמה לקוד JavaScript
+function שלום(שם) {
+    console.log(\`שלום, \${שם}!\`);
+}
+
+שלום("עולם");
+\`\`\`
+
+### דיאגרמות Mermaid
+
+#### תרשים זרימה:
+
+\`\`\`mermaid
+flowchart TD
+    A[התחלה] --> B{האם יש נתונים?}
+    B -->|כן| C[עיבוד נתונים]
+    B -->|לא| D[טעינת נתונים]
+    D --> C
+    C --> E[הצגת תוצאות]
+    E --> F[סיום]
+\`\`\`
+
+#### דיאגרמת רצף:
+
+\`\`\`mermaid
+sequenceDiagram
+    participant U as משתמש
+    participant S as שרת
+    participant DB as מסד נתונים
+    
+    U->>S: בקשת התחברות
+    S->>DB: בדיקת פרטים
+    DB-->>S: אישור
+    S-->>U: טוקן גישה
+\`\`\`
+
+#### תרשים עוגה:
+
+\`\`\`mermaid
+pie title התפלגות משימות
+    "הושלמו" : 45
+    "בתהליך" : 30
+    "ממתינות" : 25
+\`\`\`
+
+### טבלאות
+
+| שם | תפקיד | מחלקה |
+|------|--------|---------|
+| דנה | מנהלת | פיתוח |
+| יוסי | מעצב | עיצוב |
+| מיכל | מפתחת | פיתוח |
+
+### קישורים ותמונות
+
+בקר באתר [Anthropic](https://www.anthropic.com) למידע נוסף.
+
+---
+
+## סיכום
+
+עורך זה מאפשר לך:
+1. לכתוב תוכן ב-Markdown בעברית
+2. לראות תצוגה מקדימה בזמן אמת
+3. ליצור דיאגרמות Mermaid
+4. לייצא את התוכן ל-PDF או להעתיק ל-Word
+
+*תהנה מהכתיבה!* ✨`;
+
+        // Render markdown
+        async function renderMarkdown() {
+            const markdown = editor.value;
+            let html = marked.parse(markdown);
+            
+            // Find mermaid code blocks and convert them
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            
+            const codeBlocks = tempDiv.querySelectorAll('pre code.language-mermaid');
+            let mermaidCounter = 0;
+            
+            for (const block of codeBlocks) {
+                const mermaidCode = block.textContent;
+                const mermaidDiv = document.createElement('div');
+                mermaidDiv.className = 'mermaid';
+                mermaidDiv.id = `mermaid-${mermaidCounter++}`;
+                mermaidDiv.textContent = mermaidCode;
+                block.parentElement.replaceWith(mermaidDiv);
+            }
+            
+            preview.innerHTML = tempDiv.innerHTML;
+            
+            // Re-highlight code blocks
+            preview.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+            
+            // Render mermaid diagrams
+            try {
+                await mermaid.run({
+                    nodes: preview.querySelectorAll('.mermaid')
+                });
+            } catch (e) {
+                console.log('Mermaid rendering error:', e);
+            }
+        }
+
+        // Debounce function
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Event listener with debounce
+        editor.addEventListener('input', debounce(renderMarkdown, 150));
+
+        // Clear editor
+        function clearEditor() {
+            editor.value = '';
+            preview.innerHTML = '';
+            showToast('העורך נוקה');
+        }
+
+        // Load sample content
+        function loadSample() {
+            editor.value = sampleMarkdown;
+            renderMarkdown();
+            showToast('דוגמה נטענה');
+        }
+
+        // Copy HTML
+        function copyHTML() {
+            const html = preview.innerHTML;
+            navigator.clipboard.writeText(html).then(() => {
+                showToast('HTML הועתק ללוח');
+            }).catch(() => {
+                showToast('שגיאה בהעתקה');
+            });
+        }
+        
+        // Copy plain text
+        function copyPlainText() {
+            const text = preview.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('טקסט הועתק ללוח');
+            }).catch(() => {
+                showToast('שגיאה בהעתקה');
+            });
+        }
+        
+        // Copy formatted content for Word (with RTL support)
+        function copyForWord() {
+            // Create a wrapper with all necessary RTL inline styles
+            const styledHTML = generateStyledHTML();
+            
+            // Create a temporary element
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = styledHTML;
+            document.body.appendChild(tempDiv);
+            
+            // Select and copy
+            const range = document.createRange();
+            range.selectNodeContents(tempDiv);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            
+            try {
+                // Copy both HTML and plain text formats
+                const blob = new Blob([styledHTML], { type: 'text/html' });
+                const clipboardItem = new ClipboardItem({
+                    'text/html': blob,
+                    'text/plain': new Blob([preview.innerText], { type: 'text/plain' })
+                });
+                navigator.clipboard.write([clipboardItem]).then(() => {
+                    showToast('הועתק! הדבק ב-Word עם Ctrl+V');
+                }).catch(() => {
+                    // Fallback
+                    document.execCommand('copy');
+                    showToast('הועתק! הדבק ב-Word עם Ctrl+V');
+                });
+            } catch (e) {
+                document.execCommand('copy');
+                showToast('הועתק! הדבק ב-Word עם Ctrl+V');
+            }
+            
+            selection.removeAllRanges();
+            document.body.removeChild(tempDiv);
+        }
+        
+        // Generate HTML with inline styles for Word compatibility
+        function generateStyledHTML() {
+            const content = preview.innerHTML;
+            
+            // Wrap with RTL container
+            let html = `<div dir="rtl" style="direction: rtl; text-align: right; font-family: 'David', 'Arial', sans-serif; font-size: 12pt; line-height: 1.6;">`;
+            
+            // Parse and add inline styles to all elements
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = content;
+            
+            // Style headers
+            tempDiv.querySelectorAll('h1').forEach(el => {
+                el.style.cssText = 'direction: rtl; text-align: right; font-size: 24pt; font-weight: bold; margin-top: 12pt; margin-bottom: 6pt; border-bottom: 2px solid #d4a574;';
+            });
+            tempDiv.querySelectorAll('h2').forEach(el => {
+                el.style.cssText = 'direction: rtl; text-align: right; font-size: 18pt; font-weight: bold; margin-top: 12pt; margin-bottom: 6pt; border-bottom: 1px solid #ccc;';
+            });
+            tempDiv.querySelectorAll('h3').forEach(el => {
+                el.style.cssText = 'direction: rtl; text-align: right; font-size: 14pt; font-weight: bold; margin-top: 10pt; margin-bottom: 4pt;';
+            });
+            tempDiv.querySelectorAll('h4, h5, h6').forEach(el => {
+                el.style.cssText = 'direction: rtl; text-align: right; font-size: 12pt; font-weight: bold; margin-top: 8pt; margin-bottom: 4pt;';
+            });
+            
+            // Style paragraphs
+            tempDiv.querySelectorAll('p').forEach(el => {
+                el.style.cssText = 'direction: rtl; text-align: right; margin-bottom: 8pt;';
+            });
+            
+            // Style lists - CRITICAL for RTL
+            tempDiv.querySelectorAll('ul, ol').forEach(el => {
+                el.style.cssText = 'direction: rtl; text-align: right; margin-right: 20pt; margin-left: 0; padding-right: 20pt; padding-left: 0; list-style-position: inside;';
+            });
+            
+            tempDiv.querySelectorAll('li').forEach(el => {
+                el.style.cssText = 'direction: rtl; text-align: right; margin-bottom: 4pt;';
+            });
+            
+            // Style blockquotes
+            tempDiv.querySelectorAll('blockquote').forEach(el => {
+                el.style.cssText = 'direction: rtl; text-align: right; border-right: 4px solid #d4a574; border-left: none; padding-right: 12pt; padding-left: 0; margin-right: 0; margin-left: 0; color: #666; background-color: #f9f5f0;';
+            });
+            
+            // Style code
+            tempDiv.querySelectorAll('code').forEach(el => {
+                if (el.parentElement.tagName !== 'PRE') {
+                    el.style.cssText = 'background-color: #f5f5f5; padding: 2pt 4pt; border-radius: 3pt; font-family: Consolas, monospace; font-size: 10pt;';
+                }
+            });
+            
+            tempDiv.querySelectorAll('pre').forEach(el => {
+                el.style.cssText = 'direction: ltr; text-align: left; background-color: #f5f5f5; padding: 10pt; border-radius: 4pt; font-family: Consolas, monospace; font-size: 10pt; overflow-x: auto; white-space: pre-wrap;';
+            });
+            
+            // Style tables
+            tempDiv.querySelectorAll('table').forEach(el => {
+                el.style.cssText = 'direction: rtl; border-collapse: collapse; width: 100%; margin: 10pt 0;';
+            });
+            tempDiv.querySelectorAll('th, td').forEach(el => {
+                el.style.cssText = 'direction: rtl; text-align: right; border: 1px solid #ddd; padding: 6pt 10pt;';
+            });
+            tempDiv.querySelectorAll('th').forEach(el => {
+                el.style.cssText += 'background-color: #f5f5f5; font-weight: bold;';
+            });
+            
+            // Style links
+            tempDiv.querySelectorAll('a').forEach(el => {
+                el.style.cssText = 'color: #d4a574; text-decoration: none;';
+            });
+            
+            // Style strong and em
+            tempDiv.querySelectorAll('strong').forEach(el => {
+                el.style.cssText = 'font-weight: bold;';
+            });
+            tempDiv.querySelectorAll('em').forEach(el => {
+                el.style.cssText = 'font-style: italic;';
+            });
+            
+            html += tempDiv.innerHTML;
+            html += '</div>';
+            
+            return html;
+        }
+
+        // Export to PDF using browser print
+        function exportPDF() {
+            // Create a new window for printing
+            const printWindow = window.open('', '_blank');
+            const styledHTML = generatePrintHTML();
+            
+            printWindow.document.write(styledHTML);
+            printWindow.document.close();
+            
+            // Wait for content to load then print
+            printWindow.onload = function() {
+                setTimeout(() => {
+                    printWindow.print();
+                }, 250);
+            };
+            
+            showToast('חלון הדפסה נפתח - בחר "שמור כ-PDF"');
+        }
+        
+        // Generate print-optimized HTML
+        function generatePrintHTML() {
+            return `<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>מסמך Markdown</title>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Miriam+Libre:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Heebo', 'David', Arial, sans-serif;
+            font-size: 12pt;
+            line-height: 1.8;
+            direction: rtl;
+            text-align: right;
+            color: #1a1a1a;
+            background: white;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Miriam Libre', 'David', serif;
+            margin-top: 1.2em;
+            margin-bottom: 0.6em;
+            line-height: 1.3;
+            page-break-after: avoid;
+        }
+        
+        h1 {
+            font-size: 22pt;
+            border-bottom: 2px solid #d4a574;
+            padding-bottom: 8pt;
+        }
+        
+        h2 {
+            font-size: 16pt;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 4pt;
+        }
+        
+        h3 { font-size: 14pt; }
+        h4 { font-size: 12pt; }
+        
+        p {
+            margin-bottom: 0.8em;
+        }
+        
+        ul, ol {
+            margin-bottom: 1em;
+            padding-right: 1.5em;
+            padding-left: 0;
+        }
+        
+        li {
+            margin-bottom: 0.4em;
+        }
+        
+        blockquote {
+            margin: 1em 0;
+            padding: 0.8em 1em;
+            border-right: 4px solid #d4a574;
+            background: #f9f5f0;
+            color: #555;
+        }
+        
+        code {
+            font-family: 'Courier New', Consolas, monospace;
+            font-size: 10pt;
+            background: #f5f5f5;
+            padding: 2pt 4pt;
+            border-radius: 3pt;
+        }
+        
+        pre {
+            direction: ltr;
+            text-align: left;
+            margin: 1em 0;
+            padding: 12pt;
+            background: #f5f5f5;
+            border-radius: 4pt;
+            overflow-x: auto;
+            font-family: 'Courier New', Consolas, monospace;
+            font-size: 9pt;
+            page-break-inside: avoid;
+        }
+        
+        pre code {
+            background: none;
+            padding: 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1em 0;
+            page-break-inside: avoid;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8pt 12pt;
+            text-align: right;
+        }
+        
+        th {
+            background: #f5f5f5;
+            font-weight: 600;
+        }
+        
+        tr:nth-child(even) {
+            background: #fafafa;
+        }
+        
+        a {
+            color: #d4a574;
+            text-decoration: none;
+        }
+        
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(to left, #d4a574, transparent);
+            margin: 1.5em 0;
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        strong {
+            font-weight: 700;
+        }
+        
+        em {
+            font-style: italic;
+        }
+        
+        del {
+            text-decoration: line-through;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    ${preview.innerHTML}
+</body>
+</html>`;
+        }
+        
+        // Export as HTML file
+        function exportHTML() {
+            const htmlContent = generatePrintHTML();
+            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'markdown-document.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('קובץ HTML הורד');
+        }
+        
+        // Dropdown functions
+        function toggleDropdown(id) {
+            const dropdown = document.getElementById(id);
+            const isOpen = dropdown.classList.contains('open');
+            
+            // Close all dropdowns
+            closeDropdowns();
+            
+            // Toggle current
+            if (!isOpen) {
+                dropdown.classList.add('open');
+            }
+        }
+        
+        function closeDropdowns() {
+            document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open'));
+        }
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.dropdown')) {
+                closeDropdowns();
+            }
+        });
+
+        // Theme toggle
+        function toggleTheme() {
+            const body = document.body;
+            const isDark = body.getAttribute('data-theme') === 'dark';
+            body.setAttribute('data-theme', isDark ? '' : 'dark');
+            
+            const icon = document.getElementById('themeIcon');
+            if (isDark) {
+                icon.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+            } else {
+                icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+            }
+            
+            showToast(isDark ? 'מצב בהיר' : 'מצב כהה');
+        }
+
+        // Toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+
+        // Initialize with sample content
+        loadSample();
+    </script>
+</body>
+</html>
