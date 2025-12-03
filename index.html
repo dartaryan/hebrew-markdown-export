@@ -5,16 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>עורך Markdown עברי | Hebrew Markdown Editor</title>
     
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="עורך Markdown עברי - כתיבה מקצועית בעברית">
+    <meta property="og:description" content="כלי ווב מתקדם לכתיבה, עריכה וייצוא של תוכן Markdown בעברית עם תמיכה מלאה ב-RTL, דיאגרמות Mermaid וייצוא ל-PDF ו-Word">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://github.com/dartaryan/hebrew-markdown-export">
+    <meta property="og:image" content="https://raw.githubusercontent.com/dartaryan/hebrew-markdown-export/main/og-image.png">
+    <meta property="og:locale" content="he_IL">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="עורך Markdown עברי">
+    <meta name="twitter:description" content="כלי מתקדם לכתיבת Markdown בעברית עם תמיכה ב-RTL, דיאגרמות וייצוא מקצועי">
+    
+    <!-- General Meta -->
+    <meta name="description" content="עורך Markdown עברי מתקדם עם תמיכה מלאה ב-RTL, דיאגרמות Mermaid, ייצוא ל-PDF ו-Word. פתרון מושלם לכתיבת תוכן טכני בעברית.">
+    <meta name="keywords" content="markdown, עברית, RTL, עורך, editor, hebrew, mermaid, PDF, Word">
+    <meta name="author" content="BEN AKIVA">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✏️</text></svg>">
+    
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&family=Miriam+Libre:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
     <!-- Marked.js for Markdown parsing -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
     <!-- Highlight.js for code syntax highlighting -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     
     <!-- Mermaid.js for diagrams -->
@@ -22,41 +43,37 @@
     
     <style>
         :root {
-            --bg-primary: #faf9f7;
-            --bg-secondary: #ffffff;
-            --bg-tertiary: #f5f3ef;
-            --text-primary: #1a1a1a;
-            --text-secondary: #4a4a4a;
-            --text-muted: #8a8a8a;
-            --accent: #d4a574;
-            --accent-hover: #c49464;
-            --accent-light: #f5ebe0;
-            --border: #e8e4de;
-            --border-light: #f0ece6;
-            --shadow: rgba(0, 0, 0, 0.06);
-            --shadow-hover: rgba(0, 0, 0, 0.1);
-            --code-bg: #f8f6f2;
-            --success: #7cb07e;
-            --font-body: 'Heebo', sans-serif;
-            --font-heading: 'Miriam Libre', serif;
+            --primary: #10B981;
+            --secondary: #6EE7B7;
+            --accent: #2DD4BF;
+            --dark: #064E3B;
+            --darker: #022c22;
+            --background: #FFFFFF;
+            --surface: #F0FDF4;
+            --foreground: #064E3B;
+            --text-secondary: #047857;
+            --text-muted: #6B7280;
+            --border: #d1fae5;
+            --border-light: #ecfdf5;
+            --card-shadow: 0 10px 40px rgba(6, 78, 59, 0.15);
+            --card-hover-shadow: 0 20px 60px rgba(6, 78, 59, 0.25);
+            --code-bg: #0d1117;
+            --success: #10B981;
+            --font-body: 'Varela Round', system-ui, sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
         }
 
         [data-theme="dark"] {
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #242424;
-            --bg-tertiary: #2a2a2a;
-            --text-primary: #f0ece6;
-            --text-secondary: #c4c0b8;
-            --text-muted: #8a8682;
-            --accent: #d4a574;
-            --accent-hover: #e4b584;
-            --accent-light: #3a3530;
-            --border: #3a3a3a;
-            --border-light: #2e2e2e;
-            --shadow: rgba(0, 0, 0, 0.3);
-            --shadow-hover: rgba(0, 0, 0, 0.4);
-            --code-bg: #2a2825;
+            --background: #0f1f1a;
+            --surface: #132520;
+            --foreground: #ecfdf5;
+            --text-secondary: #a7f3d0;
+            --text-muted: #6ee7b7;
+            --border: #064e3b;
+            --border-light: #052e24;
+            --card-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            --card-hover-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            --code-bg: #0d1117;
         }
 
         * {
@@ -67,30 +84,47 @@
 
         body {
             font-family: var(--font-body);
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            background: linear-gradient(180deg, var(--dark) 0%, #0a6b4d 50%, var(--primary) 100%);
             min-height: 100vh;
-            transition: background 0.3s ease, color 0.3s ease;
+            color: var(--foreground);
+            overflow-x: hidden;
+        }
+
+        /* Geometric background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(110, 231, 183, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(45, 212, 191, 0.1) 0%, transparent 50%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2310B981' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
         }
 
         /* Header */
         .header {
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem 2rem;
-            position: sticky;
+            position: fixed;
             top: 0;
-            z-index: 100;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(6, 78, 59, 0.95);
             backdrop-filter: blur(10px);
-        }
-
-        .header-content {
-            max-width: 1800px;
-            margin: 0 auto;
+            padding: 0.75rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .header.hidden {
+            transform: translateY(-100%);
         }
 
         .logo {
@@ -102,26 +136,25 @@
         .logo-icon {
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
-            border-radius: 10px;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.25rem;
-            color: white;
+            color: var(--dark);
             font-weight: 700;
-            box-shadow: 0 4px 12px rgba(212, 165, 116, 0.3);
+            box-shadow: 0 4px 12px rgba(110, 231, 183, 0.3);
         }
 
         .logo-text {
-            font-family: var(--font-heading);
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: var(--text-primary);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: white;
         }
 
         .logo-text span {
-            color: var(--accent);
+            color: var(--secondary);
         }
 
         .header-actions {
@@ -136,49 +169,49 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 0.6rem 1rem;
+            padding: 0.6rem 1.25rem;
             border: none;
-            border-radius: 8px;
+            border-radius: 25px;
             font-family: var(--font-body);
-            font-size: 0.875rem;
-            font-weight: 500;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             white-space: nowrap;
+            border: 2px solid transparent;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+            background: var(--primary);
             color: white;
-            box-shadow: 0 2px 8px rgba(212, 165, 116, 0.3);
+            border-color: var(--secondary);
         }
 
         .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(212, 165, 116, 0.4);
+            background: var(--dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
         }
 
         .btn-secondary {
-            background: var(--bg-tertiary);
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
+            background: rgba(110, 231, 183, 0.2);
+            color: white;
+            border-color: transparent;
         }
 
         .btn-secondary:hover {
-            background: var(--accent-light);
-            color: var(--accent);
-            border-color: var(--accent);
+            background: rgba(110, 231, 183, 0.3);
+            border-color: var(--secondary);
         }
 
         .btn-icon {
             padding: 0.6rem;
             background: transparent;
-            color: var(--text-muted);
+            color: rgba(255, 255, 255, 0.7);
         }
 
         .btn-icon:hover {
-            background: var(--bg-tertiary);
-            color: var(--accent);
+            background: rgba(110, 231, 183, 0.2);
+            color: var(--secondary);
         }
 
         .btn svg {
@@ -188,54 +221,74 @@
 
         /* Main Layout */
         .main {
+            position: relative;
+            z-index: 1;
             max-width: 1800px;
             margin: 0 auto;
-            padding: 1.5rem 2rem;
+            padding: 5rem 2rem 2rem;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1.5rem;
-            min-height: calc(100vh - 80px);
+            min-height: 100vh;
         }
 
-        /* Editor Panel */
+        /* Panels */
         .panel {
-            background: var(--bg-secondary);
-            border-radius: 16px;
-            border: 1px solid var(--border);
+            background: var(--background);
+            border-radius: 24px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 4px 20px var(--shadow);
-            transition: box-shadow 0.3s ease;
+            box-shadow: var(--card-shadow);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
         }
 
         .panel:hover {
-            box-shadow: 0 8px 30px var(--shadow-hover);
+            box-shadow: var(--card-hover-shadow);
+            transform: translateY(-5px);
         }
 
         .panel-header {
-            padding: 1rem 1.25rem;
-            border-bottom: 1px solid var(--border-light);
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: var(--bg-tertiary);
+            background: var(--surface);
         }
 
         .panel-title {
-            font-family: var(--font-heading);
             font-size: 1rem;
             font-weight: 600;
-            color: var(--text-primary);
+            color: var(--foreground);
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
         .panel-title-icon {
-            width: 20px;
-            height: 20px;
-            color: var(--accent);
+            width: 24px;
+            height: 24px;
+            padding: 4px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 8px;
+            color: white;
+        }
+
+        .panel-title-icon svg {
+            width: 100%;
+            height: 100%;
         }
 
         .panel-actions {
@@ -243,24 +296,49 @@
             gap: 0.25rem;
         }
 
+        .panel-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+        }
+
+        .panel-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .panel-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
         .panel-body {
             flex: 1;
             overflow: hidden;
             position: relative;
+            min-height: 500px;
         }
 
         /* Textarea */
         .editor-textarea {
             width: 100%;
             height: 100%;
-            padding: 1.25rem;
+            padding: 1.5rem;
             border: none;
             resize: none;
             font-family: var(--font-mono);
             font-size: 0.9rem;
-            line-height: 1.7;
-            background: var(--bg-secondary);
-            color: var(--text-primary);
+            line-height: 1.8;
+            background: var(--background);
+            color: var(--foreground);
             direction: rtl;
             text-align: right;
         }
@@ -288,8 +366,8 @@
         .preview-content h4,
         .preview-content h5,
         .preview-content h6 {
-            font-family: var(--font-heading);
-            color: var(--text-primary);
+            font-family: var(--font-body);
+            color: var(--foreground);
             margin-top: 1.5em;
             margin-bottom: 0.75em;
             line-height: 1.3;
@@ -304,28 +382,29 @@
         .preview-content h1 {
             font-size: 2rem;
             padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--accent);
+            border-bottom: 3px solid var(--primary);
         }
 
         .preview-content h2 {
             font-size: 1.5rem;
             padding-bottom: 0.3rem;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 2px solid var(--secondary);
         }
 
-        .preview-content h3 { font-size: 1.25rem; }
+        .preview-content h3 { font-size: 1.25rem; color: var(--text-secondary); }
         .preview-content h4 { font-size: 1.1rem; }
         .preview-content h5 { font-size: 1rem; }
-        .preview-content h6 { font-size: 0.9rem; color: var(--text-secondary); }
+        .preview-content h6 { font-size: 0.9rem; color: var(--text-muted); }
 
         .preview-content p {
             margin-bottom: 1em;
             line-height: 1.8;
+            color: var(--text-secondary);
         }
 
         .preview-content strong {
             font-weight: 700;
-            color: var(--text-primary);
+            color: var(--foreground);
         }
 
         .preview-content em {
@@ -338,14 +417,14 @@
         }
 
         .preview-content a {
-            color: var(--accent);
+            color: var(--primary);
             text-decoration: none;
-            border-bottom: 1px solid transparent;
-            transition: border-color 0.2s ease;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
         }
 
         .preview-content a:hover {
-            border-bottom-color: var(--accent);
+            border-bottom-color: var(--primary);
         }
 
         .preview-content ul,
@@ -357,6 +436,7 @@
         .preview-content li {
             margin-bottom: 0.5em;
             line-height: 1.7;
+            color: var(--text-secondary);
         }
 
         .preview-content li > ul,
@@ -368,9 +448,9 @@
         .preview-content blockquote {
             margin: 1em 0;
             padding: 1em 1.25em;
-            border-right: 4px solid var(--accent);
-            background: var(--accent-light);
-            border-radius: 0 8px 8px 0;
+            border-right: 4px solid var(--primary);
+            background: var(--surface);
+            border-radius: 0 12px 12px 0;
             color: var(--text-secondary);
         }
 
@@ -381,19 +461,20 @@
         .preview-content code {
             font-family: var(--font-mono);
             font-size: 0.85em;
-            background: var(--code-bg);
-            padding: 0.2em 0.4em;
-            border-radius: 4px;
-            color: var(--accent-hover);
+            background: var(--surface);
+            padding: 0.2em 0.5em;
+            border-radius: 6px;
+            color: var(--primary);
+            border: 1px solid var(--border);
         }
 
         .preview-content pre {
             margin: 1em 0;
             padding: 1.25em;
             background: var(--code-bg);
-            border-radius: 10px;
+            border-radius: 16px;
             overflow-x: auto;
-            border: 1px solid var(--border-light);
+            border: 1px solid var(--border);
             direction: ltr;
             text-align: left;
         }
@@ -401,8 +482,9 @@
         .preview-content pre code {
             background: none;
             padding: 0;
-            color: var(--text-primary);
+            color: #e6edf3;
             font-size: 0.875rem;
+            border: none;
         }
 
         .preview-content table {
@@ -410,6 +492,8 @@
             margin: 1em 0;
             border-collapse: collapse;
             font-size: 0.9rem;
+            border-radius: 12px;
+            overflow: hidden;
         }
 
         .preview-content th,
@@ -420,33 +504,36 @@
         }
 
         .preview-content th {
-            background: var(--bg-tertiary);
+            background: var(--primary);
+            color: white;
             font-weight: 600;
         }
 
         .preview-content tr:nth-child(even) {
-            background: var(--bg-tertiary);
+            background: var(--surface);
         }
 
         .preview-content hr {
             border: none;
-            height: 2px;
-            background: linear-gradient(90deg, var(--accent), transparent);
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), transparent);
             margin: 2em 0;
+            border-radius: 3px;
         }
 
         .preview-content img {
             max-width: 100%;
             height: auto;
-            border-radius: 8px;
+            border-radius: 12px;
             margin: 1em 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         /* Task list */
         .preview-content input[type="checkbox"] {
             margin-left: 0.5em;
-            accent-color: var(--accent);
-            transform: scale(1.1);
+            accent-color: var(--primary);
+            transform: scale(1.2);
         }
         
         /* Mermaid diagrams */
@@ -454,10 +541,10 @@
             direction: ltr;
             text-align: center;
             margin: 1.5em 0;
-            background: var(--bg-tertiary);
+            background: var(--surface);
             padding: 1.5em;
-            border-radius: 10px;
-            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            border: 1px solid var(--border);
         }
         
         .mermaid svg {
@@ -471,19 +558,20 @@
             bottom: 2rem;
             left: 50%;
             transform: translateX(-50%) translateY(100px);
-            background: var(--text-primary);
-            color: var(--bg-primary);
-            padding: 0.875rem 1.5rem;
-            border-radius: 10px;
+            background: var(--dark);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 25px;
             font-size: 0.9rem;
             font-weight: 500;
-            box-shadow: 0 8px 30px var(--shadow-hover);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
             opacity: 0;
             transition: all 0.3s ease;
             z-index: 1000;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
+            border: 2px solid var(--secondary);
         }
 
         .toast.show {
@@ -492,24 +580,147 @@
         }
 
         .toast svg {
+            width: 20px;
+            height: 20px;
+            color: var(--secondary);
+        }
+
+        /* Dropdown menu */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 0.5rem;
+            background: var(--background);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+            overflow: hidden;
+        }
+        
+        .dropdown.open .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.85rem 1.25rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: right;
+            font-family: var(--font-body);
+        }
+        
+        .dropdown-item:hover {
+            background: var(--surface);
+            color: var(--primary);
+        }
+        
+        .dropdown-item svg {
             width: 18px;
             height: 18px;
-            color: var(--success);
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 0.25rem 0;
+        }
+
+        /* Footer */
+        .footer {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .footer-logo svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--secondary);
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .footer-credit {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.25rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .footer-credit:hover {
+            background: rgba(110, 231, 183, 0.2);
+            border-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .footer-credit svg {
+            width: 20px;
+            height: 20px;
         }
 
         /* Responsive */
         @media (max-width: 1024px) {
             .main {
                 grid-template-columns: 1fr;
-                padding: 1rem;
+                padding: 5rem 1rem 1rem;
             }
 
             .panel {
                 min-height: 400px;
             }
 
-            .header-content {
-                flex-wrap: wrap;
+            .panel-body {
+                min-height: 350px;
             }
 
             .btn span {
@@ -519,30 +730,38 @@
             .btn svg {
                 margin: 0;
             }
-        }
 
-        @media (max-width: 640px) {
             .header {
                 padding: 0.75rem 1rem;
             }
+        }
 
+        @media (max-width: 640px) {
             .logo-text {
-                font-size: 1.1rem;
+                font-size: 1rem;
             }
 
             .main {
-                padding: 0.75rem;
+                padding: 4.5rem 0.75rem 0.75rem;
                 gap: 1rem;
+            }
+
+            .panel {
+                border-radius: 16px;
             }
         }
 
-        /* Print styles for PDF */
+        /* Print styles */
         @media print {
             body {
                 background: white !important;
             }
             
-            .header, .panel:first-child {
+            body::before {
+                display: none;
+            }
+            
+            .header, .panel:first-child, .footer {
                 display: none !important;
             }
 
@@ -555,6 +774,10 @@
                 border: none;
                 box-shadow: none;
                 border-radius: 0;
+            }
+
+            .panel::before {
+                display: none;
             }
             
             .panel-header {
@@ -573,19 +796,19 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: var(--bg-tertiary);
+            background: var(--surface);
         }
 
         ::-webkit-scrollbar-thumb {
-            background: var(--border);
+            background: var(--primary);
             border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-muted);
+            background: var(--dark);
         }
 
-        /* Loading animation for PDF */
+        /* Loading animation */
         .btn.loading {
             pointer-events: none;
             opacity: 0.7;
@@ -599,134 +822,83 @@
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
-        
-        /* Dropdown menu */
-        .dropdown {
-            position: relative;
-            display: inline-block;
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
-        .dropdown-menu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            margin-top: 0.5rem;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            box-shadow: 0 8px 30px var(--shadow-hover);
-            min-width: 180px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.2s ease;
-            z-index: 1000;
+
+        .panel {
+            animation: fadeInUp 0.6s ease-out;
         }
-        
-        .dropdown.open .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        
-        .dropdown-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem 1rem;
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.15s ease;
-            border: none;
-            background: none;
-            width: 100%;
-            text-align: right;
-            font-family: var(--font-body);
-        }
-        
-        .dropdown-item:first-child {
-            border-radius: 8px 8px 0 0;
-        }
-        
-        .dropdown-item:last-child {
-            border-radius: 0 0 8px 8px;
-        }
-        
-        .dropdown-item:hover {
-            background: var(--accent-light);
-            color: var(--accent);
-        }
-        
-        .dropdown-item svg {
-            width: 16px;
-            height: 16px;
-        }
-        
-        .dropdown-divider {
-            height: 1px;
-            background: var(--border-light);
-            margin: 0.25rem 0;
+
+        .panel:nth-child(2) {
+            animation-delay: 0.1s;
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <div class="logo-icon">מ</div>
-                <div class="logo-text">עורך <span>Markdown</span> עברי</div>
-            </div>
-            <div class="header-actions">
-                <button class="btn btn-secondary" onclick="clearEditor()" title="נקה">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
-                    <span>נקה</span>
+    <header class="header" id="header">
+        <div class="logo">
+            <div class="logo-icon">מ</div>
+            <div class="logo-text">עורך <span>Markdown</span> עברי</div>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-secondary" onclick="clearEditor()" title="נקה">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                <span>נקה</span>
+            </button>
+            
+            <div class="dropdown" id="copyDropdown">
+                <button class="btn btn-secondary" onclick="toggleDropdown('copyDropdown')" title="העתק">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                    <span>העתק</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
-                
-                <div class="dropdown" id="copyDropdown">
-                    <button class="btn btn-secondary" onclick="toggleDropdown('copyDropdown')" title="העתק">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
-                        <span>העתק</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                <div class="dropdown-menu">
+                    <button class="dropdown-item" onclick="copyForWord(); closeDropdowns();">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        העתק ל-Word
                     </button>
-                    <div class="dropdown-menu">
-                        <button class="dropdown-item" onclick="copyForWord(); closeDropdowns();">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                            העתק ל-Word
-                        </button>
-                        <button class="dropdown-item" onclick="copyHTML(); closeDropdowns();">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                            העתק HTML
-                        </button>
-                        <button class="dropdown-item" onclick="copyPlainText(); closeDropdowns();">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg>
-                            העתק טקסט רגיל
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="dropdown" id="exportDropdown">
-                    <button class="btn btn-primary" onclick="toggleDropdown('exportDropdown')" title="ייצא">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                        <span>ייצוא</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    <button class="dropdown-item" onclick="copyHTML(); closeDropdowns();">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                        העתק HTML
                     </button>
-                    <div class="dropdown-menu">
-                        <button class="dropdown-item" onclick="exportPDF(); closeDropdowns();">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                            ייצא PDF (הדפסה)
-                        </button>
-                        <button class="dropdown-item" onclick="exportHTML(); closeDropdowns();">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                            ייצא HTML
-                        </button>
-                    </div>
+                    <button class="dropdown-item" onclick="copyPlainText(); closeDropdowns();">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg>
+                        העתק טקסט רגיל
+                    </button>
                 </div>
-                
-                <button class="btn btn-icon" onclick="toggleTheme()" title="החלף ערכת נושא">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="themeIcon"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-                </button>
             </div>
+            
+            <div class="dropdown" id="exportDropdown">
+                <button class="btn btn-primary" onclick="toggleDropdown('exportDropdown')" title="ייצא">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    <span>ייצוא</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="dropdown-menu">
+                    <button class="dropdown-item" onclick="exportPDF(); closeDropdowns();">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        ייצא PDF (הדפסה)
+                    </button>
+                    <button class="dropdown-item" onclick="exportHTML(); closeDropdowns();">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                        ייצא HTML
+                    </button>
+                </div>
+            </div>
+            
+            <button class="btn btn-icon" onclick="toggleTheme()" title="החלף ערכת נושא">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="themeIcon"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            </button>
         </div>
     </header>
 
@@ -734,11 +906,13 @@
         <div class="panel">
             <div class="panel-header">
                 <div class="panel-title">
-                    <svg class="panel-title-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    <div class="panel-title-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    </div>
                     עורך
                 </div>
                 <div class="panel-actions">
-                    <button class="btn btn-icon" onclick="loadSample()" title="טען דוגמה">
+                    <button class="panel-btn" onclick="loadSample()" title="טען דוגמה">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
                     </button>
                 </div>
@@ -756,7 +930,9 @@
         <div class="panel">
             <div class="panel-header">
                 <div class="panel-title">
-                    <svg class="panel-title-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <div class="panel-title-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </div>
                     תצוגה מקדימה
                 </div>
             </div>
@@ -765,6 +941,27 @@
             </div>
         </div>
     </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+                <span>עורך Markdown עברי</span>
+            </div>
+            <p class="footer-text">
+                כלי מתקדם לכתיבת Markdown בעברית עם תמיכה מלאה ב-RTL, דיאגרמות Mermaid, וייצוא מקצועי ל-PDF ו-Word
+            </p>
+            <a href="https://github.com/dartaryan/hebrew-markdown-export" target="_blank" rel="noopener noreferrer" class="footer-credit">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                נבנה ע"י Ben Akiva
+            </a>
+        </div>
+    </footer>
 
     <div class="toast" id="toast">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -792,7 +989,7 @@
             startOnLoad: false,
             theme: 'default',
             securityLevel: 'loose',
-            fontFamily: 'Heebo, sans-serif'
+            fontFamily: 'Varela Round, sans-serif'
         });
 
         const editor = document.getElementById('editor');
@@ -1049,13 +1246,13 @@ pie title התפלגות משימות
             
             // Style headers
             tempDiv.querySelectorAll('h1').forEach(el => {
-                el.style.cssText = 'direction: rtl; text-align: right; font-size: 24pt; font-weight: bold; margin-top: 12pt; margin-bottom: 6pt; border-bottom: 2px solid #d4a574;';
+                el.style.cssText = 'direction: rtl; text-align: right; font-size: 24pt; font-weight: bold; margin-top: 12pt; margin-bottom: 6pt; border-bottom: 2px solid #10B981;';
             });
             tempDiv.querySelectorAll('h2').forEach(el => {
-                el.style.cssText = 'direction: rtl; text-align: right; font-size: 18pt; font-weight: bold; margin-top: 12pt; margin-bottom: 6pt; border-bottom: 1px solid #ccc;';
+                el.style.cssText = 'direction: rtl; text-align: right; font-size: 18pt; font-weight: bold; margin-top: 12pt; margin-bottom: 6pt; border-bottom: 1px solid #6EE7B7;';
             });
             tempDiv.querySelectorAll('h3').forEach(el => {
-                el.style.cssText = 'direction: rtl; text-align: right; font-size: 14pt; font-weight: bold; margin-top: 10pt; margin-bottom: 4pt;';
+                el.style.cssText = 'direction: rtl; text-align: right; font-size: 14pt; font-weight: bold; margin-top: 10pt; margin-bottom: 4pt; color: #047857;';
             });
             tempDiv.querySelectorAll('h4, h5, h6').forEach(el => {
                 el.style.cssText = 'direction: rtl; text-align: right; font-size: 12pt; font-weight: bold; margin-top: 8pt; margin-bottom: 4pt;';
@@ -1077,18 +1274,18 @@ pie title התפלגות משימות
             
             // Style blockquotes
             tempDiv.querySelectorAll('blockquote').forEach(el => {
-                el.style.cssText = 'direction: rtl; text-align: right; border-right: 4px solid #d4a574; border-left: none; padding-right: 12pt; padding-left: 0; margin-right: 0; margin-left: 0; color: #666; background-color: #f9f5f0;';
+                el.style.cssText = 'direction: rtl; text-align: right; border-right: 4px solid #10B981; border-left: none; padding-right: 12pt; padding-left: 0; margin-right: 0; margin-left: 0; color: #666; background-color: #F0FDF4;';
             });
             
             // Style code
             tempDiv.querySelectorAll('code').forEach(el => {
                 if (el.parentElement.tagName !== 'PRE') {
-                    el.style.cssText = 'background-color: #f5f5f5; padding: 2pt 4pt; border-radius: 3pt; font-family: Consolas, monospace; font-size: 10pt;';
+                    el.style.cssText = 'background-color: #F0FDF4; padding: 2pt 4pt; border-radius: 3pt; font-family: Consolas, monospace; font-size: 10pt; color: #10B981;';
                 }
             });
             
             tempDiv.querySelectorAll('pre').forEach(el => {
-                el.style.cssText = 'direction: ltr; text-align: left; background-color: #f5f5f5; padding: 10pt; border-radius: 4pt; font-family: Consolas, monospace; font-size: 10pt; overflow-x: auto; white-space: pre-wrap;';
+                el.style.cssText = 'direction: ltr; text-align: left; background-color: #0d1117; padding: 10pt; border-radius: 4pt; font-family: Consolas, monospace; font-size: 10pt; overflow-x: auto; white-space: pre-wrap; color: #e6edf3;';
             });
             
             // Style tables
@@ -1096,15 +1293,15 @@ pie title התפלגות משימות
                 el.style.cssText = 'direction: rtl; border-collapse: collapse; width: 100%; margin: 10pt 0;';
             });
             tempDiv.querySelectorAll('th, td').forEach(el => {
-                el.style.cssText = 'direction: rtl; text-align: right; border: 1px solid #ddd; padding: 6pt 10pt;';
+                el.style.cssText = 'direction: rtl; text-align: right; border: 1px solid #d1fae5; padding: 6pt 10pt;';
             });
             tempDiv.querySelectorAll('th').forEach(el => {
-                el.style.cssText += 'background-color: #f5f5f5; font-weight: bold;';
+                el.style.cssText += 'background-color: #10B981; color: white; font-weight: bold;';
             });
             
             // Style links
             tempDiv.querySelectorAll('a').forEach(el => {
-                el.style.cssText = 'color: #d4a574; text-decoration: none;';
+                el.style.cssText = 'color: #10B981; text-decoration: none;';
             });
             
             // Style strong and em
@@ -1147,7 +1344,7 @@ pie title התפלגות משימות
 <head>
     <meta charset="UTF-8">
     <title>מסמך Markdown</title>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Miriam+Libre:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
     <style>
         @page {
             size: A4;
@@ -1161,40 +1358,42 @@ pie title התפלגות משימות
         }
         
         body {
-            font-family: 'Heebo', 'David', Arial, sans-serif;
+            font-family: 'Varela Round', 'David', Arial, sans-serif;
             font-size: 12pt;
             line-height: 1.8;
             direction: rtl;
             text-align: right;
-            color: #1a1a1a;
+            color: #064E3B;
             background: white;
         }
         
         h1, h2, h3, h4, h5, h6 {
-            font-family: 'Miriam Libre', 'David', serif;
+            font-family: 'Varela Round', 'David', serif;
             margin-top: 1.2em;
             margin-bottom: 0.6em;
             line-height: 1.3;
             page-break-after: avoid;
+            color: #064E3B;
         }
         
         h1 {
             font-size: 22pt;
-            border-bottom: 2px solid #d4a574;
+            border-bottom: 3px solid #10B981;
             padding-bottom: 8pt;
         }
         
         h2 {
             font-size: 16pt;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 2px solid #6EE7B7;
             padding-bottom: 4pt;
         }
         
-        h3 { font-size: 14pt; }
+        h3 { font-size: 14pt; color: #047857; }
         h4 { font-size: 12pt; }
         
         p {
             margin-bottom: 0.8em;
+            color: #047857;
         }
         
         ul, ol {
@@ -1205,22 +1404,24 @@ pie title התפלגות משימות
         
         li {
             margin-bottom: 0.4em;
+            color: #047857;
         }
         
         blockquote {
             margin: 1em 0;
             padding: 0.8em 1em;
-            border-right: 4px solid #d4a574;
-            background: #f9f5f0;
-            color: #555;
+            border-right: 4px solid #10B981;
+            background: #F0FDF4;
+            color: #047857;
         }
         
         code {
             font-family: 'Courier New', Consolas, monospace;
             font-size: 10pt;
-            background: #f5f5f5;
+            background: #F0FDF4;
             padding: 2pt 4pt;
             border-radius: 3pt;
+            color: #10B981;
         }
         
         pre {
@@ -1228,17 +1429,19 @@ pie title התפלגות משימות
             text-align: left;
             margin: 1em 0;
             padding: 12pt;
-            background: #f5f5f5;
-            border-radius: 4pt;
+            background: #0d1117;
+            border-radius: 8pt;
             overflow-x: auto;
             font-family: 'Courier New', Consolas, monospace;
             font-size: 9pt;
             page-break-inside: avoid;
+            color: #e6edf3;
         }
         
         pre code {
             background: none;
             padding: 0;
+            color: #e6edf3;
         }
         
         table {
@@ -1249,30 +1452,32 @@ pie title התפלגות משימות
         }
         
         th, td {
-            border: 1px solid #ddd;
+            border: 1px solid #d1fae5;
             padding: 8pt 12pt;
             text-align: right;
         }
         
         th {
-            background: #f5f5f5;
+            background: #10B981;
+            color: white;
             font-weight: 600;
         }
         
         tr:nth-child(even) {
-            background: #fafafa;
+            background: #F0FDF4;
         }
         
         a {
-            color: #d4a574;
+            color: #10B981;
             text-decoration: none;
         }
         
         hr {
             border: none;
-            height: 1px;
-            background: linear-gradient(to left, #d4a574, transparent);
+            height: 3px;
+            background: linear-gradient(to left, #10B981, #6EE7B7, transparent);
             margin: 1.5em 0;
+            border-radius: 3px;
         }
         
         img {
@@ -1282,6 +1487,7 @@ pie title התפלגות משימות
         
         strong {
             font-weight: 700;
+            color: #064E3B;
         }
         
         em {
@@ -1290,7 +1496,7 @@ pie title התפלגות משימות
         
         del {
             text-decoration: line-through;
-            color: #999;
+            color: #6B7280;
         }
     </style>
 </head>
@@ -1367,6 +1573,19 @@ pie title התפלגות משימות
                 toast.classList.remove('show');
             }, 2500);
         }
+
+        // Hide header on scroll down, show on scroll up
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            const header = document.getElementById('header');
+            if (currentScroll > lastScroll && currentScroll > 100) {
+                header.classList.add('hidden');
+            } else {
+                header.classList.remove('hidden');
+            }
+            lastScroll = currentScroll;
+        });
 
         // Initialize with sample content
         loadSample();
