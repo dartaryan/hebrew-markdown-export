@@ -1911,6 +1911,10 @@
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
                             ייצא HTML
                         </button>
+                        <button class="dropdown-item" onclick="exportMarkdown(); closeDropdowns();">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                            ייצא Markdown
+                        </button>
                     </div>
                 </div>
             </div>
@@ -2551,13 +2555,22 @@ pie title התפלגות משימות
             };
         }
 
+        // Save editor content to localStorage
+        function saveEditorContent() {
+            localStorage.setItem('mdEditorContent', editor.value);
+        }
+
         // Event listener with debounce
-        editor.addEventListener('input', debounce(renderMarkdown, 150));
+        editor.addEventListener('input', debounce(() => {
+            renderMarkdown();
+            saveEditorContent();
+        }, 150));
 
         // Clear editor
         function clearEditor() {
             editor.value = '';
             preview.innerHTML = '';
+            saveEditorContent();
             showToast('העורך נוקה');
         }
 
@@ -2598,6 +2611,7 @@ pie title התפלגות משימות
         function loadSample() {
             editor.value = sampleMarkdown;
             renderMarkdown();
+            saveEditorContent();
             showToast('דוגמה נטענה');
         }
 
@@ -2767,8 +2781,11 @@ pie title התפלגות משימות
         
         // Generate print-optimized HTML
         function generatePrintHTML() {
+            const dir = isLTR ? 'ltr' : 'rtl';
+            const lang = isLTR ? 'en' : 'he';
+            const textAlign = isLTR ? 'left' : 'right';
             return `<!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="${lang}" dir="${dir}">
 <head>
     <meta charset="UTF-8">
     <title>מסמך Markdown</title>
@@ -2778,19 +2795,19 @@ pie title התפלגות משימות
             size: A4;
             margin: 2cm;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Varela Round', 'David', Arial, sans-serif;
             font-size: 12pt;
             line-height: 1.8;
-            direction: rtl;
-            text-align: right;
+            direction: ${dir};
+            text-align: ${textAlign};
             color: #064E3B;
             background: white;
         }
@@ -2826,19 +2843,19 @@ pie title התפלגות משימות
         
         ul, ol {
             margin-bottom: 1em;
-            padding-right: 1.5em;
-            padding-left: 0;
+            padding-${isLTR ? 'left' : 'right'}: 1.5em;
+            padding-${isLTR ? 'right' : 'left'}: 0;
         }
-        
+
         li {
             margin-bottom: 0.4em;
             color: #047857;
         }
-        
+
         blockquote {
             margin: 1em 0;
             padding: 0.8em 1em;
-            border-right: 4px solid #10B981;
+            border-${isLTR ? 'left' : 'right'}: 4px solid #10B981;
             background: #F0FDF4;
             color: #047857;
         }
@@ -2882,7 +2899,7 @@ pie title התפלגות משימות
         th, td {
             border: 1px solid #d1fae5;
             padding: 8pt 12pt;
-            text-align: right;
+            text-align: ${textAlign};
         }
         
         th {
@@ -2903,16 +2920,16 @@ pie title התפלגות משימות
         hr {
             border: none;
             height: 3px;
-            background: linear-gradient(to left, #10B981, #6EE7B7, transparent);
+            background: linear-gradient(to ${isLTR ? 'right' : 'left'}, #10B981, #6EE7B7, transparent);
             margin: 1.5em 0;
             border-radius: 3px;
         }
-        
+
         img {
             max-width: 100%;
             height: auto;
         }
-        
+
         strong {
             font-weight: 700;
             color: #064E3B;
@@ -2948,7 +2965,22 @@ pie title התפלגות משימות
             URL.revokeObjectURL(url);
             showToast('קובץ HTML הורד');
         }
-        
+
+        // Export as Markdown file
+        function exportMarkdown() {
+            const markdown = editor.value;
+            const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'markdown-document.md';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('קובץ Markdown הורד');
+        }
+
         // Dropdown functions
         function toggleDropdown(id) {
             const dropdown = document.getElementById(id);
@@ -3040,8 +3072,14 @@ pie title התפלגות משימות
             lastScroll = currentScroll;
         });
 
-        // Initialize with sample content
-        loadSample();
+        // Initialize: load saved content or sample
+        const savedContent = localStorage.getItem('mdEditorContent');
+        if (savedContent !== null) {
+            editor.value = savedContent;
+            renderMarkdown();
+        } else {
+            loadSample();
+        }
 
         // ========== TOOLBAR FUNCTIONALITY ==========
         
@@ -3962,8 +4000,11 @@ erDiagram
         // Override generatePrintHTML to use custom colors
         const originalGeneratePrintHTML = generatePrintHTML;
         generatePrintHTML = function() {
+            const dir = isLTR ? 'ltr' : 'rtl';
+            const lang = isLTR ? 'en' : 'he';
+            const textAlign = isLTR ? 'left' : 'right';
             return `<!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="${lang}" dir="${dir}">
 <head>
     <meta charset="UTF-8">
     <title>מסמך Markdown</title>
@@ -3973,19 +4014,19 @@ erDiagram
             size: A4;
             margin: 2cm;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Varela Round', 'David', Arial, sans-serif;
             font-size: 12pt;
             line-height: 1.8;
-            direction: rtl;
-            text-align: right;
+            direction: ${dir};
+            text-align: ${textAlign};
             color: ${currentColors.primaryText};
             background: ${currentColors.previewBg};
         }
@@ -4022,19 +4063,19 @@ erDiagram
         
         ul, ol {
             margin-bottom: 1em;
-            padding-right: 1.5em;
-            padding-left: 0;
+            padding-${isLTR ? 'left' : 'right'}: 1.5em;
+            padding-${isLTR ? 'right' : 'left'}: 0;
         }
-        
+
         li {
             margin-bottom: 0.4em;
             color: ${currentColors.secondaryText};
         }
-        
+
         blockquote {
             margin: 1em 0;
             padding: 0.8em 1em;
-            border-right: 4px solid ${currentColors.blockquoteBorder};
+            border-${isLTR ? 'left' : 'right'}: 4px solid ${currentColors.blockquoteBorder};
             background: ${currentColors.blockquoteBg};
             color: ${currentColors.secondaryText};
         }
@@ -4078,7 +4119,7 @@ erDiagram
         th, td {
             border: 1px solid ${currentColors.tableBorder};
             padding: 8pt 12pt;
-            text-align: right;
+            text-align: ${textAlign};
         }
         
         th {
@@ -4099,7 +4140,7 @@ erDiagram
         hr {
             border: none;
             height: 3px;
-            background: linear-gradient(to left, ${currentColors.hr}, ${adjustColor(currentColors.hr, 30)}, transparent);
+            background: linear-gradient(to ${isLTR ? 'right' : 'left'}, ${currentColors.hr}, ${adjustColor(currentColors.hr, 30)}, transparent);
             margin: 1.5em 0;
             border-radius: 3px;
         }
