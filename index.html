@@ -2354,6 +2354,24 @@
         </div>
     </div>
 
+    <!-- Export Filename Modal -->
+    <div class="modal-overlay" id="exportModal">
+        <div class="modal">
+            <div class="modal-title">שם הקובץ</div>
+            <div class="modal-field">
+                <label class="modal-label">הזן שם לקובץ</label>
+                <div style="display: flex; align-items: center; gap: 0.5rem; direction: ltr;">
+                    <input type="text" class="modal-input" id="exportFilename" placeholder="markdown-document" style="flex: 1;">
+                    <span id="exportExtLabel" style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 600; white-space: nowrap;"></span>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="confirmExport()">ייצא</button>
+                <button class="btn btn-secondary" onclick="closeModal('exportModal')">ביטול</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Configure marked
         marked.setOptions({
@@ -2760,22 +2778,61 @@ pie title התפלגות משימות
             return html;
         }
 
+        // Export filename modal state
+        let pendingExportType = null;
+
+        function openExportModal(type) {
+            pendingExportType = type;
+            const extMap = { pdf: '.pdf', html: '.html', md: '.md' };
+            document.getElementById('exportFilename').value = 'markdown-document';
+            document.getElementById('exportExtLabel').textContent = extMap[type];
+            document.getElementById('exportModal').classList.add('open');
+            const input = document.getElementById('exportFilename');
+            input.focus();
+            input.select();
+        }
+
+        function confirmExport() {
+            const filename = document.getElementById('exportFilename').value.trim() || 'markdown-document';
+            closeModal('exportModal');
+            if (pendingExportType === 'pdf') {
+                doExportPDF(filename);
+            } else if (pendingExportType === 'html') {
+                doExportHTML(filename);
+            } else if (pendingExportType === 'md') {
+                doExportMarkdown(filename);
+            }
+            pendingExportType = null;
+        }
+
+        // Allow Enter key to confirm export
+        document.getElementById('exportFilename').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                confirmExport();
+            }
+        });
+
+        // Export wrappers that open the modal
+        function exportPDF() { openExportModal('pdf'); }
+        function exportHTML() { openExportModal('html'); }
+        function exportMarkdown() { openExportModal('md'); }
+
         // Export to PDF using browser print
-        function exportPDF() {
-            // Create a new window for printing
+        function doExportPDF(filename) {
             const printWindow = window.open('', '_blank');
             const styledHTML = generatePrintHTML();
-            
+
             printWindow.document.write(styledHTML);
             printWindow.document.close();
-            
-            // Wait for content to load then print
+            printWindow.document.title = filename;
+
             printWindow.onload = function() {
                 setTimeout(() => {
                     printWindow.print();
                 }, 250);
             };
-            
+
             showToast('חלון הדפסה נפתח - בחר "שמור כ-PDF"');
         }
         
@@ -2952,13 +3009,13 @@ pie title התפלגות משימות
         }
         
         // Export as HTML file
-        function exportHTML() {
+        function doExportHTML(filename) {
             const htmlContent = generatePrintHTML();
             const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'markdown-document.html';
+            a.download = filename + '.html';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -2967,13 +3024,13 @@ pie title התפלגות משימות
         }
 
         // Export as Markdown file
-        function exportMarkdown() {
+        function doExportMarkdown(filename) {
             const markdown = editor.value;
             const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'markdown-document.md';
+            a.download = filename + '.md';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -4177,6 +4234,7 @@ erDiagram
                 closeModal('linkModal');
                 closeModal('imageModal');
                 closeModal('tableModal');
+                closeModal('exportModal');
                 if (document.getElementById('colorPanel').classList.contains('open')) {
                     toggleColorPanel();
                 }
