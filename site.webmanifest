@@ -1,0 +1,19 @@
+{
+    "name": "Hebrew Markdown Editor | עורך Markdown עברי",
+    "short_name": "MD Editor",
+    "description": "כלי מתקדם לכתיבת Markdown בעברית",
+    "start_url": "/hebrew-markdown-export/",
+    "display": "standalone",
+    "theme_color": "#064E3B",
+    "background_color": "#064E3B",
+    "dir": "rtl",
+    "lang": "he",
+    "icons": [
+        {
+            "src": "pen.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}
