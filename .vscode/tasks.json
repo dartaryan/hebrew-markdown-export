@@ -4,11 +4,12 @@
     {
       "label": "Claude Commit",
       "type": "shell",
-      "command": "claude -p '/commit'",
+      "command": "claude -p 'Look at the git diff of staged changes. If nothing is staged, stage all modified and new files. Then create a git commit with a clear, concise commit message that describes what changed and why. Add Co-Authored-By: Claude <noreply@anthropic.com> to the message.'",
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",
-        "panel": "shared"
+        "panel": "dedicated",
+        "close": false
       }
     }
   ]

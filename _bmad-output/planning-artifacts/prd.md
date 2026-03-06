@@ -404,7 +404,7 @@ Marko is a **Single-Page Application (SPA)** with server-side rendered landing/m
 - FR28: Users can ask the AI to suggest grammar, style, and clarity improvements to their content
 - FR29: System routes AI tasks to the appropriate model (Haiku/Sonnet) based on task complexity, invisible to the user
 - FR30: System enforces AI usage limits based on user tier (free: limited per month, paid: unlimited Sonnet + daily Opus)
-- FR31: Users receive a dismissible banner notification when they reach their free AI usage limit, with an upgrade link
+- FR31: When users who have reached their free AI usage limit open the AI command palette, AI actions appear dimmed with an inline upgrade prompt and link — communicated contextually at the point of action, not via a banner or modal
 
 ### User Accounts & Authentication
 

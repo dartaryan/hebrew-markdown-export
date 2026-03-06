@@ -167,7 +167,7 @@ These interactions must require zero thought and feel instant:
 | Professionalism | Smart PDF page breaks by default. Color themes that look polished out of the box. Typography that reads well in print. |
 | Home (Hebrew-native) | RTL as default direction. All UI text in Hebrew. Hebrew ARIA labels. Direction auto-detection that handles real Hebrew/English mixing. |
 | Pleasant surprise (AI) | AI results appear inline, contextual to the document. No generic chatbot UI. Actions like "summarize" and "extract action items" feel like natural document operations. |
-| No pressure (monetization) | Dismissible upgrade banners. Free tier is fully functional for core features. AI limit message shows remaining value, not loss. |
+| No pressure (monetization) | Contextual upgrade prompt inside the AI command palette (not a banner). Free tier is fully functional for core features. AI limit message shows remaining value, not loss. |
 | Reassurance (errors) | Graceful degradation: AI down → banner, not broken UI. PDF generation → progress indicator. Mermaid parse error → friendly message, not blank space. |
 
 ### Emotional Design Principles
@@ -277,7 +277,7 @@ The technology migration to shadcn/ui is confirmed. shadcn/ui provides:
 **What to Add (New in v2):**
 - AI action entry point (single sparkle icon in toolbar → command palette)
 - Authentication UI (minimal — avatar/login button in header, not a navigation bar)
-- Upgrade prompt (inline banner, dismissible, below the toolbar or in the AI panel)
+- Upgrade prompt (contextual, inside the AI command palette only)
 - Presentation mode (full-screen, distraction-free preview)
 - PDF export dialog (smart defaults with optional advanced controls)
 
@@ -295,7 +295,7 @@ The technology migration to shadcn/ui is confirmed. shadcn/ui provides:
 | **Accessibility (WCAG AA)** | Radix UI primitives provide focus management, keyboard navigation, ARIA labels, and RTL support out of the box. Hebrew ARIA labels are configurable per component. |
 | **Solo developer velocity** | Copy-paste component ownership — no abstraction layers, no framework lock-in. Components live in the codebase, fully customizable. Next.js provides routing, API routes, and SSR with zero config. |
 | **Hybrid rendering** | Next.js serves SSR/SSG landing page for SEO while the editor route runs as a client-side SPA for performance. Per-route rendering strategy with no compromise. |
-| **Backend needs** | Next.js API routes handle AI proxy, auth endpoints, payment webhooks, and analytics — all in one project. No separate server. |
+| **Backend needs** | Convex handles AI proxy (actions), auth webhooks (Clerk), payment webhooks, and analytics — all as serverless functions alongside the Next.js frontend. No separate server. |
 | **shadcn/ui first-class support** | Next.js has the strongest shadcn/ui integration, including Server Components compatibility for the landing page. |
 | **Community & longevity** | Next.js holds 67% React framework market share (2026). shadcn/ui is the most popular React component collection. Both have large, active communities. |
 
@@ -1110,10 +1110,10 @@ Components that don't exist in shadcn/ui and must be built:
 - Dark/light mode toggle with CSS variable switching
 
 **Phase 1 Sprint 3: Auth + AI**
-- Google OAuth integration (NextAuth.js or Auth.js)
+- Google OAuth integration (Clerk)
 - Auth button / Avatar in header with dropdown menu
 - AI command palette (CommandDialog) with gate checks
-- AI proxy API route (Next.js API routes → Anthropic API)
+- AI proxy (Convex actions → Anthropic API)
 - AIResultPanel with accept/dismiss
 - Usage tracking and remaining quota display
 
