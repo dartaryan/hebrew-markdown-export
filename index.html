@@ -725,7 +725,7 @@
 
         .preview-content th,
         .preview-content td {
-            padding: 0.75em 1em;
+            padding: 0.4em 0.6em;
             border: 1px solid var(--border);
             text-align: right;
         }
@@ -1234,6 +1234,10 @@
 
             .preview-content {
                 padding: 0;
+            }
+
+            .code-copy-btn {
+                display: none !important;
             }
         }
 
@@ -3161,13 +3165,20 @@ pie title התפלגות משימות
     <style>
         @page {
             size: A4;
-            margin: 2cm;
+            margin: 1.8cm;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            max-width: 100%;
+        }
+
+        html {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
         }
 
         body {
@@ -3178,6 +3189,12 @@ pie title התפלגות משימות
             text-align: ${textAlign};
             color: #064E3B;
             background: white;
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding-inline: 16pt;
+            padding-block: 0;
+            overflow-x: hidden;
         }
         
         h1, h2, h3, h4, h5, h6 {
@@ -3242,32 +3259,45 @@ pie title התפלגות משימות
             text-align: left;
             margin: 1em 0;
             padding: 12pt;
-            background: #0d1117;
+            background: #f5f5f5;
+            border: 1px solid #d1d5db;
             border-radius: 8pt;
-            overflow-x: auto;
+            overflow: hidden;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            word-break: break-all;
+            overflow-wrap: anywhere;
             font-family: 'Courier New', Consolas, monospace;
             font-size: 9pt;
             page-break-inside: avoid;
-            color: #e6edf3;
+            color: #0d1117;
         }
-        
+
         pre code {
             background: none;
             padding: 0;
-            color: #e6edf3;
+            color: #0d1117;
+            white-space: pre-wrap;
+            word-break: break-all;
         }
-        
+
         table {
             width: 100%;
+            max-width: 100%;
             border-collapse: collapse;
             margin: 1em 0;
             page-break-inside: avoid;
+            table-layout: auto;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
-        
+
         th, td {
             border: 1px solid #d1fae5;
-            padding: 8pt 12pt;
+            padding: 4pt 6pt;
             text-align: ${textAlign};
+            word-break: break-word;
+            overflow-wrap: anywhere;
         }
         
         th {
@@ -3311,6 +3341,31 @@ pie title התפלגות משימות
             text-decoration: line-through;
             color: #6B7280;
         }
+
+        /* Hide on-screen-only UI in exports */
+        .code-copy-btn { display: none !important; }
+
+        /* Center Mermaid diagrams and scale them to fit page width */
+        .mermaid {
+            display: block;
+            text-align: center;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+            margin: 1em auto;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        .mermaid svg {
+            max-width: 100% !important;
+            width: auto !important;
+            height: auto !important;
+            max-height: 22cm;
+            display: block;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
@@ -3318,7 +3373,7 @@ pie title התפלגות משימות
 </body>
 </html>`;
         }
-        
+
         // Export as HTML file
         function doExportHTML(filename) {
             const htmlContent = generatePrintHTML();
@@ -4497,13 +4552,20 @@ erDiagram
     <style>
         @page {
             size: A4;
-            margin: 2cm;
+            margin: 1.8cm;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            max-width: 100%;
+        }
+
+        html {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
         }
 
         body {
@@ -4514,6 +4576,12 @@ erDiagram
             text-align: ${textAlign};
             color: ${currentColors.primaryText};
             background: ${currentColors.previewBg};
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding-inline: 16pt;
+            padding-block: 0;
+            overflow-x: hidden;
         }
         
         h1, h2, h3, h4, h5, h6 {
@@ -4579,32 +4647,45 @@ erDiagram
             text-align: left;
             margin: 1em 0;
             padding: 12pt;
-            background: ${currentColors.codeBg};
+            background: #f5f5f5;
+            border: 1px solid #d1d5db;
             border-radius: 8pt;
-            overflow-x: auto;
+            overflow: hidden;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            word-break: break-all;
+            overflow-wrap: anywhere;
             font-family: 'Courier New', Consolas, monospace;
             font-size: 9pt;
             page-break-inside: avoid;
-            color: #e6edf3;
+            color: #0d1117;
         }
-        
+
         pre code {
             background: none;
             padding: 0;
-            color: #e6edf3;
+            color: #0d1117;
+            white-space: pre-wrap;
+            word-break: break-all;
         }
-        
+
         table {
             width: 100%;
+            max-width: 100%;
             border-collapse: collapse;
             margin: 1em 0;
             page-break-inside: avoid;
+            table-layout: auto;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
-        
+
         th, td {
             border: 1px solid ${currentColors.tableBorder};
-            padding: 8pt 12pt;
+            padding: 4pt 6pt;
             text-align: ${textAlign};
+            word-break: break-word;
+            overflow-wrap: anywhere;
         }
         
         th {
@@ -4647,6 +4728,35 @@ erDiagram
         del {
             text-decoration: line-through;
             color: #6B7280;
+        }
+
+        /* Hide on-screen-only UI in exports */
+        .code-copy-btn { display: none !important; }
+
+        /* Center Mermaid diagrams and scale them to fit page width */
+        .mermaid {
+            display: block;
+            text-align: center;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+            margin: 1em auto;
+            background: ${currentColors.blockquoteBg};
+            border: 1px solid ${currentColors.tableBorder};
+            border-radius: 8pt;
+            padding: 1em;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        .mermaid svg {
+            max-width: 100% !important;
+            width: auto !important;
+            height: auto !important;
+            max-height: 22cm;
+            display: block;
+            margin: 0 auto;
         }
     </style>
 </head>
