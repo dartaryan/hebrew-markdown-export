@@ -288,6 +288,10 @@
             transition: transform 0.2s ease;
         }
 
+        #pdfPageBreakBtn.active svg {
+            transform: none;
+        }
+
         .btn svg {
             width: 18px;
             height: 18px;
@@ -2045,6 +2049,16 @@
 
             <!-- Pin -->
             <div class="header-action-group">
+                <button class="btn btn-icon" id="pdfPageBreakBtn" onclick="togglePdfPageBreak()" title="‎---‎ כמעבר עמוד ב-PDF">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="4" y="3" width="16" height="6" rx="1"/>
+                        <rect x="4" y="15" width="16" height="6" rx="1"/>
+                        <line x1="3" y1="12" x2="6" y2="12"/>
+                        <line x1="9" y1="12" x2="12" y2="12"/>
+                        <line x1="15" y1="12" x2="18" y2="12"/>
+                        <line x1="21" y1="12" x2="22" y2="12"/>
+                    </svg>
+                </button>
                 <button class="btn btn-icon" id="headerPinBtn" onclick="toggleHeaderPin()" title="נעץ כותרת">
                     <svg id="headerPinIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>
                 </button>
@@ -3321,7 +3335,21 @@ pie title התפלגות משימות
             background: linear-gradient(to ${isLTR ? 'right' : 'left'}, #10B981, #6EE7B7, transparent);
             margin: 1.5em 0;
             border-radius: 3px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
         }
+
+        ${isPdfPageBreakOnHR ? `
+        hr {
+            page-break-after: always;
+            break-after: page;
+            visibility: hidden;
+            height: 0;
+            margin: 0;
+            border: none;
+            background: none;
+        }
+        ` : ''}
 
         img {
             max-width: 100%;
@@ -3484,6 +3512,24 @@ pie title התפלגות משימות
             showToast(isHeaderPinned ? 'הכותרת נעוצה' : 'נעיצת הכותרת בוטלה');
         }
         applyHeaderPinState();
+
+        // PDF page-break toggle: when active, <hr> becomes a page break in PDF export
+        let isPdfPageBreakOnHR = localStorage.getItem('mdEditorPdfPageBreakOnHR') === 'true';
+        function applyPdfPageBreakState() {
+            const btn = document.getElementById('pdfPageBreakBtn');
+            if (!btn) return;
+            btn.classList.toggle('active', isPdfPageBreakOnHR);
+            btn.title = isPdfPageBreakOnHR
+                ? '‎---‎ פועל כמעבר עמוד ב-PDF (לחץ לביטול)'
+                : '‎---‎ כמעבר עמוד ב-PDF';
+        }
+        function togglePdfPageBreak() {
+            isPdfPageBreakOnHR = !isPdfPageBreakOnHR;
+            localStorage.setItem('mdEditorPdfPageBreakOnHR', String(isPdfPageBreakOnHR));
+            applyPdfPageBreakState();
+            showToast(isPdfPageBreakOnHR ? '‎---‎ יפעל כמעבר עמוד ב-PDF' : '‎---‎ יוצג כקו הפרדה ב-PDF');
+        }
+        applyPdfPageBreakState();
 
         // Hide header on scroll down, show on scroll up
         let lastScroll = 0;
@@ -4709,8 +4755,22 @@ erDiagram
             background: linear-gradient(to ${isLTR ? 'right' : 'left'}, ${currentColors.hr}, ${adjustColor(currentColors.hr, 30)}, transparent);
             margin: 1.5em 0;
             border-radius: 3px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
         }
-        
+
+        ${isPdfPageBreakOnHR ? `
+        hr {
+            page-break-after: always;
+            break-after: page;
+            visibility: hidden;
+            height: 0;
+            margin: 0;
+            border: none;
+            background: none;
+        }
+        ` : ''}
+
         img {
             max-width: 100%;
             height: auto;
