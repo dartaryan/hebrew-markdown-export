@@ -344,7 +344,7 @@
             transition: all 0.3s ease-out;
         }
 
-        .main.editor-only .panel:nth-child(2) {
+        .main.editor-only .panel:last-child {
             display: none;
         }
 
@@ -354,10 +354,11 @@
         }
 
         .main.editor-only .panel:first-child {
-            max-width: 1000px;
+            max-width: var(--single-panel-width, 1000px);
             margin: 0 auto;
             width: 100%;
             min-height: calc(100vh - 7rem);
+            position: relative;
         }
 
         .main.preview-only .panel:first-child {
@@ -369,11 +370,12 @@
             min-height: auto;
         }
 
-        .main.preview-only .panel:nth-child(2) {
-            max-width: 1000px;
+        .main.preview-only .panel:last-child {
+            max-width: var(--single-panel-width, 1000px);
             margin: 0 auto;
             width: 100%;
             min-height: calc(100vh - 7rem);
+            position: relative;
         }
 
         /* Main Layout */
@@ -384,9 +386,82 @@
             margin: 0 auto;
             padding: 5rem 2rem 2rem;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
+            grid-template-columns: var(--split-left, 1fr) 10px var(--split-right, 1fr);
+            gap: 0;
             min-height: 100vh;
+        }
+
+        .main > .panel:first-child  { margin-inline-end:   0.75rem; }
+        .main > .panel:last-child   { margin-inline-start: 0.75rem; }
+
+        /* Splitter between editor and preview */
+        .splitter {
+            background: transparent;
+            cursor: col-resize;
+            position: relative;
+            z-index: 5;
+            touch-action: none;
+            transition: background 150ms ease;
+        }
+        .splitter::before {
+            content: '';
+            position: absolute;
+            inset: 1% 0;
+            margin: 0 auto;
+            width: 3px;
+            background: var(--border);
+            border-radius: 3px;
+            opacity: 0.55;
+            transition: opacity 150ms ease, background 150ms ease, width 150ms ease;
+        }
+        .splitter:hover::before,
+        .splitter.dragging::before {
+            opacity: 1;
+            background: var(--primary);
+            width: 5px;
+        }
+        .splitter.snapped::before {
+            background: var(--accent);
+            opacity: 1;
+        }
+
+        .main.editor-only > .splitter,
+        .main.preview-only > .splitter { display: none; }
+
+        /* Edge handles for single-pane resize */
+        .panel-edge-handle {
+            display: none;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 14px;
+            cursor: ew-resize;
+            z-index: 5;
+            touch-action: none;
+        }
+        .panel-edge-handle.left  { left:  -7px; }
+        .panel-edge-handle.right { right: -7px; }
+        .panel-edge-handle::before {
+            content: '';
+            position: absolute;
+            inset: 1% 0;
+            margin: 0 auto;
+            width: 3px;
+            background: var(--border);
+            border-radius: 3px;
+            opacity: 0.55;
+            transition: opacity 150ms ease, background 150ms ease, width 150ms ease;
+        }
+        .panel-edge-handle:hover::before,
+        .panel-edge-handle.dragging::before {
+            opacity: 1;
+            background: var(--primary);
+            width: 5px;
+        }
+
+        .main.editor-only  > .panel:first-child  > .panel-edge-handle,
+        .main.preview-only > .panel:last-child   > .panel-edge-handle {
+            display: block;
         }
 
         /* Panels */
@@ -995,6 +1070,16 @@
                 padding: 7.5rem 1rem 1rem;
             }
 
+            .splitter { display: none; }
+            .panel-edge-handle { display: none !important; }
+            #resetLayoutBtn { display: none; }
+
+            .main > .panel:first-child,
+            .main > .panel:last-child {
+                margin-inline-start: 0;
+                margin-inline-end: 0;
+            }
+
             .panel {
                 min-height: 400px;
             }
@@ -1027,7 +1112,7 @@
             }
 
             .main.editor-only .panel:first-child,
-            .main.preview-only .panel:nth-child(2) {
+            .main.preview-only .panel:last-child {
                 max-width: 100%;
                 min-height: calc(100vh - 6rem);
             }
@@ -1478,18 +1563,16 @@
         .direction-toggle-btn {
             display: flex;
             align-items: center;
-            gap: 0.4rem;
-            padding: 0.4rem 0.75rem;
+            padding: 0.6rem;
             border: 2px solid var(--accent);
             background: linear-gradient(135deg, rgba(45, 212, 191, 0.1), rgba(110, 231, 183, 0.1));
-            border-radius: 20px;
+            border-radius: 12px;
             cursor: pointer;
             color: var(--accent);
             font-family: var(--font-body);
             font-size: 0.75rem;
             font-weight: 600;
             transition: all 0.2s ease;
-            min-width: 70px;
             justify-content: center;
         }
 
@@ -2049,6 +2132,12 @@
 
             <!-- Pin -->
             <div class="header-action-group">
+                <button class="btn btn-icon" id="resetLayoutBtn" onclick="resetLayout()" title="אפס פריסה (50/50, רוחב מלא)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="16" rx="2"/>
+                        <line x1="12" y1="4" x2="12" y2="20"/>
+                    </svg>
+                </button>
                 <button class="btn btn-icon" id="pdfPageBreakBtn" onclick="togglePdfPageBreak()" title="‎---‎ כמעבר עמוד ב-PDF">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="4" y="3" width="16" height="6" rx="1"/>
@@ -2068,6 +2157,8 @@
 
     <main class="main">
         <div class="panel">
+            <div class="panel-edge-handle left"></div>
+            <div class="panel-edge-handle right"></div>
             <div class="panel-header">
                 <div class="panel-title">
                     <div class="panel-title-icon">
@@ -2199,7 +2290,11 @@
             </div>
         </div>
 
+        <div class="splitter" id="splitter" role="separator" aria-orientation="vertical"></div>
+
         <div class="panel">
+            <div class="panel-edge-handle left"></div>
+            <div class="panel-edge-handle right"></div>
             <div class="panel-header">
                 <div class="panel-title">
                     <div class="panel-title-icon">
@@ -2573,8 +2668,21 @@
 
     <script>
         // App version and changelog
-        const APP_VERSION = '1.5.0';
+        const APP_VERSION = '1.6.0';
         const CHANGELOG = [
+            {
+                version: '1.6.0',
+                date: '2026-05-18',
+                changes: [
+                    'מפריד נגרר בין העורך לתצוגה המקדימה — שמירה אוטומטית של היחס, סנאפ ל-50/50',
+                    'התאמת רוחב בתצוגה יחידה — ידיות גרירה בשני צידי הפאנל',
+                    'כפתור איפוס פריסה — מאפס את היחס ואת הרוחב (גם בלחיצה כפולה על המפריד)',
+                    'מעבר עמוד ב-PDF — כפתור להפעלת ‎---‎ כמעבר עמוד בייצוא',
+                    'שיפורי ייצוא PDF — Mermaid מתאים לעמוד יחיד, בלוקי קוד קריאים, טבלאות לא נחתכות',
+                    'תיקוני RTL בייצוא PDF — אין יותר זליגה לשמאל',
+                    'כפתור החלפת הכיוון הוקטן להתאמה לסרגל הכלים'
+                ]
+            },
             {
                 version: '1.5.0',
                 date: '2026-05-17',
@@ -3530,6 +3638,132 @@ pie title התפלגות משימות
             showToast(isPdfPageBreakOnHR ? '‎---‎ יפעל כמעבר עמוד ב-PDF' : '‎---‎ יוצג כקו הפרדה ב-PDF');
         }
         applyPdfPageBreakState();
+
+        // Resizable splitter between editor and preview (desktop split mode)
+        let splitRatio = parseFloat(localStorage.getItem('mdEditorSplitRatio'));
+        if (!Number.isFinite(splitRatio) || splitRatio < 0.15 || splitRatio > 0.85) splitRatio = 0.5;
+
+        function applySplitRatio(r) {
+            const main = document.querySelector('.main');
+            main.style.setProperty('--split-left',  r + 'fr');
+            main.style.setProperty('--split-right', (1 - r) + 'fr');
+        }
+        applySplitRatio(splitRatio);
+
+        (function bindSplitter() {
+            const splitter = document.getElementById('splitter');
+            if (!splitter) return;
+            const main = document.querySelector('.main');
+            let dragging = false;
+
+            function getX(e) { return e.touches ? e.touches[0].clientX : e.clientX; }
+
+            function startDrag(e) {
+                dragging = true;
+                splitter.classList.add('dragging');
+                document.body.style.userSelect = 'none';
+                e.preventDefault();
+            }
+            function onMove(e) {
+                if (!dragging) return;
+                const rect = main.getBoundingClientRect();
+                const x = isLTR ? (getX(e) - rect.left) : (rect.right - getX(e));
+                let ratio = Math.max(0.15, Math.min(0.85, x / rect.width));
+                if (Math.abs(ratio - 0.5) < 0.03) {
+                    ratio = 0.5;
+                    splitter.classList.add('snapped');
+                } else {
+                    splitter.classList.remove('snapped');
+                }
+                splitRatio = ratio;
+                applySplitRatio(ratio);
+                if (e.cancelable) e.preventDefault();
+            }
+            function endDrag() {
+                if (!dragging) return;
+                dragging = false;
+                splitter.classList.remove('dragging');
+                document.body.style.userSelect = '';
+                localStorage.setItem('mdEditorSplitRatio', String(splitRatio));
+            }
+
+            splitter.addEventListener('mousedown', startDrag);
+            splitter.addEventListener('touchstart', startDrag, { passive: false });
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('touchmove', onMove, { passive: false });
+            document.addEventListener('mouseup', endDrag);
+            document.addEventListener('touchend', endDrag);
+        })();
+
+        // Single-pane resizable width (editor-only / preview-only modes)
+        let singlePanelWidth = localStorage.getItem('mdEditorSinglePanelWidth') || '';
+        function applySinglePanelWidth(w) {
+            const main = document.querySelector('.main');
+            if (w) main.style.setProperty('--single-panel-width', w);
+            else   main.style.removeProperty('--single-panel-width');
+        }
+        applySinglePanelWidth(singlePanelWidth);
+
+        (function bindEdgeHandles() {
+            const handles = document.querySelectorAll('.panel-edge-handle');
+            if (!handles.length) return;
+            const main = document.querySelector('.main');
+
+            function getX(e) { return e.touches ? e.touches[0].clientX : e.clientX; }
+
+            handles.forEach(handle => {
+                let dragging = false;
+                function start(e) {
+                    dragging = true;
+                    handle.classList.add('dragging');
+                    document.body.style.userSelect = 'none';
+                    e.preventDefault();
+                }
+                function move(e) {
+                    if (!dragging) return;
+                    const rect = main.getBoundingClientRect();
+                    const center = rect.left + rect.width / 2;
+                    const dist = Math.abs(getX(e) - center);
+                    const pct = Math.max(40, Math.min(100, (dist * 2 / rect.width) * 100));
+                    singlePanelWidth = pct.toFixed(1) + '%';
+                    applySinglePanelWidth(singlePanelWidth);
+                    if (e.cancelable) e.preventDefault();
+                }
+                function end() {
+                    if (!dragging) return;
+                    dragging = false;
+                    handle.classList.remove('dragging');
+                    document.body.style.userSelect = '';
+                    localStorage.setItem('mdEditorSinglePanelWidth', singlePanelWidth);
+                }
+                handle.addEventListener('mousedown', start);
+                handle.addEventListener('touchstart', start, { passive: false });
+                document.addEventListener('mousemove', move);
+                document.addEventListener('touchmove', move, { passive: false });
+                document.addEventListener('mouseup', end);
+                document.addEventListener('touchend', end);
+            });
+        })();
+
+        // Reset layout: splitter back to 50/50, single-pane back to default width
+        function resetLayout() {
+            splitRatio = 0.5;
+            applySplitRatio(0.5);
+            localStorage.removeItem('mdEditorSplitRatio');
+
+            singlePanelWidth = '';
+            applySinglePanelWidth('');
+            localStorage.removeItem('mdEditorSinglePanelWidth');
+
+            const splitter = document.getElementById('splitter');
+            if (splitter) splitter.classList.remove('snapped', 'dragging');
+
+            showToast('פריסה אופסה');
+        }
+
+        // Double-click reset shortcuts
+        document.getElementById('splitter')?.addEventListener('dblclick', resetLayout);
+        document.querySelectorAll('.panel-edge-handle').forEach(h => h.addEventListener('dblclick', resetLayout));
 
         // Hide header on scroll down, show on scroll up
         let lastScroll = 0;
