@@ -273,72 +273,47 @@
             flex-shrink: 0;
         }
 
-        /* Color variants — preset gradients, a notch darker, flat, no border */
-        .btn.red {
-            background: linear-gradient(135deg, #B5040F, #5A0000);
-            color: #fff;
-            border-color: transparent;
-        }
-        .btn.red:hover {
-            background: linear-gradient(135deg, #CC0512, #730000);
-            border-color: transparent;
-            color: #fff;
-        }
+        /* Subtle group tones — flat, no gradients. Same green family, only opacity/tint shifts. */
 
-        .btn.blue {
-            background: linear-gradient(135deg, #3A8FCC, #12253D);
-            color: #fff;
-            border-color: transparent;
-        }
-        .btn.blue:hover {
-            background: linear-gradient(135deg, #4A9FDB, #1A3251);
-            border-color: transparent;
-            color: #fff;
-        }
-
+        /* Action group (paste / clear / copy) — slightly more present */
+        .btn.red,
+        .btn.blue,
         .btn.yellow {
-            background: linear-gradient(135deg, #D9A00C, #8B3F06);
-            color: #fff;
+            background: rgba(110, 231, 183, 0.20);
+            color: rgba(255, 255, 255, 0.95);
             border-color: transparent;
         }
+        .btn.red:hover,
+        .btn.blue:hover,
         .btn.yellow:hover {
-            background: linear-gradient(135deg, #EAB014, #A14908);
-            border-color: transparent;
+            background: rgba(110, 231, 183, 0.32);
+            border-color: var(--secondary);
             color: #fff;
         }
 
-        .btn.purple {
-            background: linear-gradient(135deg, #8B6FE8, #5B21B6);
-            color: #fff;
-            border-color: transparent;
-        }
-        .btn.purple:hover {
-            background: linear-gradient(135deg, #9C82F0, #6B28CC);
-            border-color: transparent;
-            color: #fff;
-        }
-
+        /* Tools group (direction / color settings) — tiny teal shift, more subtle */
+        .btn.purple,
         .btn.turquoise {
-            background: linear-gradient(135deg, #1FB8A4, #086F66);
-            color: #fff;
+            background: rgba(45, 212, 191, 0.14);
+            color: rgba(255, 255, 255, 0.92);
             border-color: transparent;
         }
+        .btn.purple:hover,
         .btn.turquoise:hover {
-            background: linear-gradient(135deg, #28C9B3, #0B857A);
-            border-color: transparent;
+            background: rgba(45, 212, 191, 0.26);
+            border-color: rgba(45, 212, 191, 0.5);
             color: #fff;
         }
 
-        /* The ONE primary action — Export (classic preset gradient, same style as the others) */
+        /* Export — the one CTA. Solid green, flat. */
         .btn.cta {
-            background: linear-gradient(135deg, #0E9F70, #043A2C);
+            background: var(--primary);
             color: #fff;
-            border-color: transparent;
+            border-color: var(--secondary);
         }
-
         .btn.cta:hover {
-            background: linear-gradient(135deg, #11B07E, #055744);
-            border-color: transparent;
+            background: var(--dark);
+            border-color: var(--secondary);
             color: #fff;
         }
 
@@ -1084,12 +1059,12 @@
         }
 
         /* Responsive */
-        /* Hide button text labels before the row can overflow.
+        /* Hide button text labels only when the action row truly can't fit them.
            Either all buttons show text, or none — never wrap to two rows. */
-        @media (max-width: 1280px) {
+        @media (max-width: 768px) {
             /* Collapse labeled buttons to icons (except the CTA + view-toggle segments) */
             .header-actions > .btn > span,
-            .header-actions > .header-action-group > .btn:not(.cta) > span {
+            .header-actions > .header-action-group:not(:has(.view-toggle-group)) .btn:not(.cta) > span {
                 display: none;
             }
 
@@ -1558,16 +1533,16 @@
             margin: 0 0.25rem;
         }
 
-        /* LTR-active state for direction button — sky preset (different from RTL turquoise) */
+        /* LTR-active state for direction button — stays in the same green family, just brighter */
         #directionToggle.ltr-active {
-            background: linear-gradient(135deg, #3A8FCC, #12253D);
+            background: rgba(45, 212, 191, 0.32);
             color: #fff;
-            border-color: transparent;
+            border-color: var(--accent);
         }
 
         #directionToggle.ltr-active:hover {
-            background: linear-gradient(135deg, #4A9FDB, #1A3251);
-            border-color: transparent;
+            background: rgba(45, 212, 191, 0.42);
+            border-color: var(--accent);
         }
 
         /* LTR Mode Styles */
@@ -2646,8 +2621,9 @@
                         title: 'סרגל כלים חדש',
                         items: [
                             'עיצוב אחיד שטוח לכל הכפתורים — סגנון אחד במקום חמישה',
-                            'כפתורי פעולה צבעוניים מתאימים לערכות הנושא: רובי לנקה, שמיים להדבק, זהב להעתק, לבנדר להתאמת צבעים, מנטה לכיוון RTL',
-                            'כפתור ייצוא בולט בגרדיאנט ירוק קלאסי',
+                            'קבוצות עדינות לפי תפקיד: פעולות (הדבק/נקה/העתק) בגוון אחד, כלים בגוון מעט שונה',
+                            'כפתור ייצוא בולט בירוק מלא — ה-CTA היחיד בסרגל',
+                            'תוויות לכפתורי הפעולה מופיעות מעל 768px ומתכווצות לאייקונים במובייל',
                             'טולטיפים אחידים בסגנון כהה במקום של הדפדפן'
                         ]
                     },
